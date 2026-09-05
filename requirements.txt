@@ -1,6 +1,5 @@
 streamlit
 weasyprint
 jinja2
-gspread
-google-auth
+requests
 pandas
