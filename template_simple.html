@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 10mm 11mm 10mm 11mm;
+    background-color: #ffffff;
+    @bottom-right {
+      content: "பக்கம் " counter(page) " / " counter(pages);
+      font-size: 8pt;
+      font-family: 'Latha', 'Tamil Sangam MN', 'Nirmala UI', sans-serif;
+      color: #777;
+    }
+    @bottom-left {
+      content: "முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட் - அடகு நகை மீட்பு சட்ட வழிகாட்டுதல் தொகுப்பு";
+      font-size: 7.5pt;
+      font-family: 'Latha', 'Tamil Sangam MN', 'Nirmala UI', sans-serif;
+      color: #999;
+    }
+  }
+  body {
+    font-family: 'Nirmala UI', 'Latha', 'Tamil Sangam MN', 'FreeSerif', 'Arial Unicode MS', sans-serif;
+    color: #1a1a1a;
+    line-height: 1.32;
+    margin: 0;
+    padding: 0;
+    font-size: 8.8pt;
+  }
+  .page-break { page-break-before: always; }
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #b8860b;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .company-title {
+    font-size: 13.5pt;
+    font-weight: bold;
+    color: #8b0000;
+    margin: 0 0 2px 0;
+  }
+  .company-sub {
+    font-size: 7.8pt;
+    color: #444;
+    margin: 0 0 2px 0;
+  }
+  .doc-title-badge {
+    display: inline-block;
+    background-color: #8b0000;
+    color: #ffffff;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-size: 9pt;
+    font-weight: bold;
+    margin-top: 2px;
+  }
+  .section-title {
+    background-color: #f7f1e5;
+    border-left: 4px solid #8b0000;
+    padding: 2px 6px;
+    font-size: 8.8pt;
+    font-weight: bold;
+    color: #8b0000;
+    margin: 4px 0 3px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4px;
+    font-size: 8.3pt;
+  }
+  table.data-table th, table.data-table td {
+    border: 1px solid #c9bea9;
+    padding: 3.5px 5px;
+    vertical-align: middle;
+  }
+  table.data-table th {
+    background-color: #fcf8f2;
+    font-weight: bold;
+    color: #443020;
+    text-align: left;
+  }
+  .stamp-box {
+    border: 1px dashed #8b0000;
+    width: 65px;
+    height: 75px;
+    margin: 0 auto 4px auto;
+    text-align: center;
+    padding-top: 15px;
+    font-size: 7.5pt;
+    color: #8b0000;
+    box-sizing: border-box;
+    background: #fff;
+  }
+  .sign-box-customer {
+    border: 1.5px solid #8b0000;
+    background-color: #fffaf5;
+    border-radius: 4px;
+    padding: 4px;
+    text-align: center;
+  }
+  .sign-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+    width: 14px;
+    height: 14px;
+  }
+  .sign-label {
+    font-weight: bold;
+    font-size: 8.2pt;
+    color: #8b0000;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .sign-line {
+    border-top: 1px dashed #8b0000;
+    padding-top: 2px;
+    font-size: 7.5pt;
+    color: #333;
+  }
+  .normal-sign-label {
+    font-size: 7.8pt;
+    font-weight: bold;
+    color: #444;
+    display: block;
+    margin-bottom: 18px;
+  }
+  .normal-sign-line {
+    border-top: 1px dashed #666;
+    padding-top: 2px;
+    font-size: 7.2pt;
+    color: #555;
+  }
+  .sign-container {
+    display: table;
+    width: 100%;
+    margin-top: 5px;
+    page-break-inside: avoid;
+  }
+  .sign-col {
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: center;
+    padding: 0 3px;
+  }
+  .perforate-bar {
+    border-top: 2px dashed #888;
+    margin: 6px 0;
+    text-align: center;
+    position: relative;
+  }
+  .perforate-bar span {
+    background: #fff;
+    padding: 0 8px;
+    position: relative;
+    top: -8px;
+    font-size: 6.8pt;
+    color: #666;
+    font-style: italic;
+  }
+  .photo-box {
+    border: 1px dashed #888;
+    width: 85px;
+    height: 100px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 30px;
+    font-size: 7pt;
+    color: #666;
+    box-sizing: border-box;
+    background: #fafafa;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: SOP -->
+<div class="header">
+  <div class="company-title">முத்துசிஸ் கோல்டு புராடக்ட் பிரைவேட் லிமிடெட்</div>
+  <div class="company-sub">பதிவு அலுவலகம்: செட்டிகுளம் சந்திப்பு, கே.பி. ரோடு, நாகர்கோவில் – 629001 | CIN: U47912TN2024PTC171143</div>
+  <div class="doc-title-badge">அடகு நகைகள் மீட்பு & கொள்முதல்: சட்ட வழிகாட்டு நெறிமுறைகள் (SOP)</div>
+</div>
+
+<div style="background-color: #fdfaf3; border: 1px solid #ebdcc5; border-radius: 4px; padding: 5px 7px; font-size: 8pt; margin-bottom: 6px; color: #8b0000;">
+  <strong>முக்கிய சட்ட எச்சரிக்கை:</strong> வாடிக்கையாளரின் சேமிப்புக் கணக்கிற்கு முன்கூட்டியே பணத்தை அனுப்பிவிட்டு அவரை மட்டும் தனியாக வங்கிக்கு அனுப்பும் போது ஏற்படும் இழப்புகளைத் தவிர்க்க பின்வரும் 5 படிநிலைகளைக் கண்டிப்புடன் கடைப்பிடிக்கவும்.
+</div>
+
+<div style="font-size: 8.4pt; text-align: justify; line-height: 1.45;">
+  <p><strong>1. படி 1: முன்கூட்டிய ஆவணச் சரிபார்ப்பு (Pre-Screening & KYC):</strong> வாடிக்கையாளரின் அசல் ஆதார் அட்டை, பான் அட்டை மற்றும் வங்கியின் அசல் அடகு ரசீது மற்றும் நடப்புக் கடன் அறிக்கை சரிபார்க்கப்பட வேண்டும். நகல் படிவத்தில் வாடிக்கையாளரின் நேரடி புகைப்படம் ஒட்டப்பட்டு கையொப்பம் பெறப்பட வேண்டும்.</p>
+  <p><strong>2. படி 2: சட்டப்பூர்வ முன்பண ஒப்பந்தம் & வாக்குறுதிச் சீட்டு (Agreement & DPN):</strong> பணம் வழங்கும் முன் இத்தொகுப்பிலுள்ள படிவம்-1 பூர்த்தி செய்யப்பட்டு, ரூ.1 ரெவென்யூ ஸ்டாம்ப் மீது வாடிக்கையாளரிடம் கையொப்பம் பெறப்பட வேண்டும். இதில் பணம் வங்கியிலிருந்து நகையை மீட்பதற்காக மட்டுமே வழங்கப்படுகிறது என்பதும், மீறினால் கிரிமினல் மோசடி என்பதும் தெளிவாக உள்ளது.</p>
+  <p><strong>3. படி 3: பாதுகாப்புக் காசோலை பெறுதல் (Security Cheque):</strong> முன்பணமாக வழங்கப்படும் மொத்த தொகைக்கு வாடிக்கையாளரின் சேமிப்புக் கணக்கிலிருந்து கையொப்பமிட்ட காசோலை (Undated Cheque) பெற வேண்டும். இது வாடிக்கையாளர் நகையை ஒப்படைக்கத் தவறினால் Negotiable Instruments Act Sec 138-இன் கீழ் உடனடி நடவடிக்கை எடுக்க உதவும்.</p>
+  <p><strong>4. படி 4: நேரடி வங்கிச் செலுத்துதல் & நிறுவனப் பிரதிநிதி உடன் செல்லுதல் (Field Escort):</strong> வாடிக்கையாளருக்கு ரொக்கமாகப் பணத்தைக் கொடுக்காமல், வங்கியின் நகைக்கடன் கணக்கிற்கே நேரடியாக RTGS/NEFT/IMPS மூலம் செலுத்த வேண்டும். படிவம்-2 (வங்கி அதிகாரமளித்தல் கடிதத்துடன்) நிறுவன அலுவலர் வாடிக்கையாளருடன் நேரடியாக வங்கிக்குச் சென்று, நகை மீட்கப்படும் தருணத்தில் உடன் இருந்து நகையை நேரடியாகப் பெற்று அலுவலகத்திற்குப் பத்திரமாகக் கொண்டு வர வேண்டும்.</p>
+  <p><strong>5. படி 5: தரப் பரிசோதனை & இறுதி தீர்வு (XRF Testing & Final Settlement):</strong> அலுவலகம் வந்ததும் வாடிக்கையாளர் முன்னிலையில் நகையின் எடை, கழிவு, தூய்மை (XRF சோதனை) பதிவு செய்யப்பட்டு, முன்பணத்தைக் கழித்து மீதித் தொகை வழங்கப்பட்டு படிவம்-3-ல் இறுதி ஒப்புதல் பெறப்பட்டு பாதுகாப்புக் காசோலை வாடிக்கையாளரிடம் திருப்பிக் கொடுக்கப்பட வேண்டும்.</p>
+</div>
+
+<div class="sign-container" style="margin-top: 15px;">
+  <div class="sign-col" style="width: 50%;">
+    <span class="normal-sign-label">கிளை சரிபார்ப்பு அலுவலர்</span>
+    <div class="normal-sign-line">கையொப்பம்</div>
+  </div>
+  <div class="sign-col" style="width: 50%;">
+    <span class="normal-sign-label">அங்கீகரிக்கப்பட்ட கிளை மேலாளர்</span>
+    <div class="normal-sign-line">முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட்</div>
+  </div>
+</div>
+
+<!-- PAGE 2: FORM 1 - REVENUE STAMP AGREEMENT -->
+<div class="page-break"></div>
+<div class="header">
+  <div class="company-title">முத்துசிஸ் கோல்டு புராடக்ட் பிரைவேட் லிமிடெட்</div>
+  <div class="company-sub">பதிவு அலுவலகம்: செட்டிகுளம் சந்திப்பு, கே.பி. ரோடு, நாகர்கோவில் – 629001</div>
+  <div class="doc-title-badge">படிவம் 1: அடகு நகை மீட்பு முன்பண ஒப்பந்தம் & வாக்குறுதிப் பத்திரம்</div>
+</div>
+
+<table style="margin-bottom: 3px;">
+  <tr>
+    <td style="width: 50%; border: none;"><strong>வரிசை எண் (Booklet No):</strong> {{ docket_no }}</td>
+    <td style="width: 50%; border: none; text-align: right;"><strong>தேதி:</strong> {{ txn_date }}</td>
+  </tr>
+</table>
+
+<table style="width: 100%; border: none; margin-bottom: 4px;">
+  <tr>
+    <td style="width: 78%; border: none; vertical-align: top; padding-right: 6px;">
+      <div class="section-title">பகுதி A: வாடிக்கையாளர் & அடகு விபரம் (Customer & Pledge Details)</div>
+      <table class="data-table">
+        <tr>
+          <td style="width: 32%;"><strong>வாடிக்கையாளர் பெயர்:</strong></td>
+          <td style="width: 68%;"><strong>{{ customer_name }}</strong></td>
+        </tr>
+        <tr>
+          <td><strong>தந்தை / கணவர் பெயர்:</strong></td>
+          <td>{{ customer_guardian }}</td>
+        </tr>
+        <tr>
+          <td><strong>ஆதார் & பான் எண்:</strong></td>
+          <td>ஆதார்: {{ customer_aadhaar }} | பான்: {{ customer_pan }}</td>
+        </tr>
+        <tr>
+          <td><strong>கைபேசி & முகவரி:</strong></td>
+          <td>போன்: {{ customer_phone }}<br>முகவரி: {{ customer_address }}</td>
+        </tr>
+        <tr>
+          <td><strong>அடகு வங்கி & கிளை:</strong></td>
+          <td>{{ bank_name }} (கிளை: {{ bank_branch }})</td>
+        </tr>
+        <tr>
+          <td><strong>கடன் எண் & ரசீது எண்:</strong></td>
+          <td>கடன்: {{ loan_acc_no }} | ரசீது: {{ pledge_receipt_no }}</td>
+        </tr>
+        <tr>
+          <td><strong>உத்தேச மொத்த எடை:</strong></td>
+          <td><strong>{{ gross_weight }} கிராம்</strong></td>
+        </tr>
+      </table>
+    </td>
+    <td style="width: 22%; border: none; vertical-align: top; text-align: center;">
+      <div class="photo-box">வாடிக்கையாளர்<br>நேரடி<br>புகைப்படம்</div>
+    </td>
+  </tr>
+</table>
+
+<div class="section-title">பகுதி B: முன்பண விவரம் & வாக்குறுதி ஒப்பந்தம் (Advance Agreement & DPN)</div>
+<table class="data-table">
+  <tr>
+    <th style="width: 35%;">வழங்கப்பட்ட மீட்பு முன்பணத் தொகை</th>
+    <td style="width: 65%;"><strong>ரூ. {{ advance_amount }}/-</strong></td>
+  </tr>
+  <tr>
+    <th>பரிவர்த்தனை முறை / UTR எண்</th>
+    <td>வங்கிப் பரிவர்த்தனை UTR Ref: <strong>{{ utr_no }}</strong> (தேதி: {{ txn_date }})</td>
+  </tr>
+  <tr>
+    <th>பாதுகாப்புக் காசோலை (Security Cheque)</th>
+    <td>வங்கி: {{ cheque_bank }} | காசோலை எண்: {{ cheque_no }}</td>
+  </tr>
+</table>
+
+<div style="font-weight: bold; font-size: 8.4pt; color: #8b0000; margin: 3px 0 2px 0;">ஒப்பந்த நிபந்தனைகள்:</div>
+<ol style="padding-left: 16px; margin: 0 0 4px 0; font-size: 8.2pt; line-height: 1.35; text-align: justify;">
+  <li>மேற்கண்ட முன்பணத் தொகையானது குறிப்பிட்ட வங்கியிலுள்ள எனது நகைக்கடன் கணக்கை அடைத்து அடகு நகையை மீட்பதற்காக மட்டுமே வழங்கப்பட்டுள்ளது. இத்தொகையை நான் வேறு எதற்கும் பயன்படுத்த மாட்டேன்.</li>
+  <li>பணம் பெறப்பட்ட நேரத்திலிருந்து அதிகபட்சமாக <strong>{{ time_limit }} மணி நேரத்திற்குள்</strong> நகைகளை முழுமையாக மீட்டு முத்துசிஸ் கோல்டு நிறுவனத்திடம் விற்பனைக்காகவோ அல்லது மறு அடகுக்காகவோ நேரடியாக ஒப்படைக்க உறுதியளிக்கிறேன்.</li>
+  <li>தவறும் பட்சத்தில் இத்தொகையை நிறுவனத்திற்கு உடனடியாகத் திருப்பிச் செலுத்திவிடுவேன். ஏமாற்றும் நோக்கத்துடன் நகையை ஒப்படைக்கத் தவறினால் அது குற்றவியல் நம்பிக்கை மோசடி (Sec 406/420 IPC) என்பதை அறிவேன்.</li>
+</ol>
+
+<table style="width: 100%; border: none; margin-top: 4px;">
+  <tr>
+    <td style="width: 25%; text-align: center; border: none; vertical-align: middle;">
+      <div class="stamp-box">ரெவென்யூ<br>ரூ. 1<br>ஸ்டாம்ப்</div>
+    </td>
+    <td style="width: 75%; border: none; vertical-align: middle;">
+      <div class="sign-box-customer">
+        <span class="sign-label">
+          <svg class="sign-icon" viewBox="0 0 24 24" fill="#8b0000"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          வாடிக்கையாளர் கையொப்பம் (ஸ்டாம்பின் மீது கையொப்பமிடவும்)
+        </span>
+        <div class="sign-line">{{ customer_name }}</div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<div class="sign-container" style="margin-top: 6px;">
+  <div class="sign-col" style="width: 35%;">
+    <span class="normal-sign-label">சாட்சி 1 (பெயர் & முகவரி)</span>
+    <div class="normal-sign-line">கையொப்பம்</div>
+  </div>
+  <div class="sign-col" style="width: 35%;">
+    <span class="normal-sign-label">சாட்சி 2 (நிறுவன அலுவலர்)</span>
+    <div class="normal-sign-line">கையொப்பம்</div>
+  </div>
+  <div class="sign-col" style="width: 30%;">
+    <span class="normal-sign-label">கிளை மேலாளர் ஒப்புதல்</span>
+    <div class="normal-sign-line">முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட்</div>
+  </div>
+</div>
+
+<!-- PAGE 3: FORM 2 - BANK AUTH & INDEMNITY -->
+<div class="page-break"></div>
+<div class="header">
+  <div class="company-title">முத்துசிஸ் கோல்டு புராடக்ட் பிரைவேட் லிமிடெட்</div>
+  <div class="company-sub">அடகு நகைகள் மீட்பு பரிவர்த்தனை ஆவணத் தொகுப்பு - பகுதி 2</div>
+  <div class="doc-title-badge">படிவம் 2: வங்கி அதிகாரமளித்தல் சீட்டு & சுய உடைமை உறுதிமொழிப் பத்திரம்</div>
+</div>
+
+<div class="section-title">அங்கீகரிக்கப்பட்ட வங்கி அதிகாரமளித்தல் சீட்டு (Bank Authorization Slip)</div>
+<div style="border: 1px solid #c8bda8; padding: 6px; background: #fffdf9; border-radius: 4px;">
+  <table style="width: 100%; border: none; margin-bottom: 2px;">
+    <tr>
+      <td style="border: none; width: 60%;"><strong>பெறுநர்:</strong> கிளை மேலாளர் அவர்கள்,<br>{{ bank_name }},<br>{{ bank_branch }} கிளை.</td>
+      <td style="border: none; width: 40%; text-align: right; vertical-align: top;"><strong>தேதி:</strong> {{ txn_date }}<br><strong>கடன் கணக்கு எண்:</strong><br>{{ loan_acc_no }}</td>
+    </tr>
+  </table>
+  <p style="font-size: 8.2pt; text-align: justify; margin: 2px 0;">
+    ஐயா / அம்மா எனது மேற்கண்ட நகைக்கடன் கணக்கிற்கான முழுத் தொகையையும் செலுத்தி கணக்கை நேர் செய்யவும், என் முன்னிலையில் அடகு நகைகளைச் சரிபார்த்து என்னுடன் பெற்றுக்கொள்ளவும், என்னுடன் வருகை தந்துள்ள <strong>முத்துசிஸ் கோல்டு புராடக்ட் பிரைவேட் லிமிடெட்</strong> நிறுவனத்தின் பிரதிநிதி திரு/திருமதி ......................................................................... என்பவருக்கு முழு அதிகாரமளிக்கிறேன்.
+  </p>
+  <div class="sign-container" style="margin-top: 8px;">
+    <div class="sign-col" style="width: 50%;">
+      <span class="normal-sign-label">நிறுவனப் பிரதிநிதி மாதிரி கையொப்பம்</span>
+      <div class="normal-sign-line">பிரதிநிதி பெயர்: .......................................</div>
+    </div>
+    <div class="sign-col" style="width: 50%;">
+      <div class="sign-box-customer">
+        <span class="sign-label" style="margin-bottom: 12px;">
+          <svg class="sign-icon" viewBox="0 0 24 24" fill="#8b0000"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          வாடிக்கையாளர் கையொப்பம்
+        </span>
+        <div class="sign-line">{{ customer_name }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="perforate-bar">
+  <span>(வங்கிக்குச் செல்லும்போது இப்பகுதியை மட்டும் கிழித்துப் பயன்படுத்தலாம் / Perforated Slip)</span>
+</div>
+
+<div class="section-title">சுய அறிவிப்பு & இழப்பீட்டு உத்தரவாதப் பத்திரம் (Self Declaration & Indemnity Bond)</div>
+<div style="font-size: 8.1pt; text-align: justify; line-height: 1.35; color: #222; border: 1px solid #dcd3c3; padding: 6px; background: #faf8f4; border-radius: 4px;">
+  நான், <strong>{{ customer_name }}</strong>, த/க பெயர் {{ customer_guardian }}, ஆதார் எண் {{ customer_aadhaar }} முத்துசிஸ் கோல்டு நிறுவனத்திற்கு மனப்பூர்வமாக அளிக்கும் உறுதிமொழி:<br>
+  1. நான் மீட்கும் தங்க நகைகள் அனைத்தும் எனது சொந்த உழைப்பில்/வருமானத்தில் வாங்கப்பட்ட முழு சுய உரிமையுடைய ஆபரணங்கள் ஆகும்.<br>
+  2. இந்நகைகள் மீது குடும்ப வாரிசுதாரர்கள், கூட்டு பங்குதாரர்கள், மைனர் பிள்ளைகள் அல்லது மூன்றாம் நபரின் எவ்வித உரிமையோ, தடையோ, வில்லங்கமோ அல்லது நீதிமன்ற வழக்குகளோ இல்லை.<br>
+  3. இந்நகைகள் திருட்டு சொத்தோ அல்லது சட்டவிரோத செயல்களுடன் தொடர்புடையதோ அல்ல. எதிர்காலத்தில் இந்நகைகள் குறித்து ஏதேனும் உரிமைத் தகராறோ அல்லது காவல் துறை/நீதிமன்ற விசாரணையோ ஏற்பட்டால், அதற்கு நானே முழுப் பொறுப்பாவேன்.<br>
+  4. நிறுவனத்திற்கு இதனால் ஏதேனும் நிதி இழப்போ அல்லது சட்டச் செலவுகளோ ஏற்பட்டால், அதனை எனது சொந்த சொத்துக்கள் மூலம் முழுமையாக ஈடுசெய்வேன் (Indemnify) என்று உறுதியளிக்கிறேன்.
+</div>
+
+<div class="sign-container" style="margin-top: 10px;">
+  <div class="sign-col" style="width: 45%;">
+    <span class="normal-sign-label">சாட்சி கையொப்பம்</span>
+    <div class="normal-sign-line">பெயர் & போன்: .......................................</div>
+  </div>
+  <div class="sign-col" style="width: 55%;">
+    <div class="sign-box-customer">
+      <span class="sign-label" style="margin-bottom: 12px;">
+        <svg class="sign-icon" viewBox="0 0 24 24" fill="#8b0000"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        வாடிக்கையாளர் கையொப்பம்
+      </span>
+      <div class="sign-line">{{ customer_name }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: FORM 3 - TESTING & FINAL SETTLEMENT -->
+<div class="page-break"></div>
+<div class="header">
+  <div class="company-title">முத்துசிஸ் கோல்டு புராடக்ட் பிரைவேட் லிமிடெட்</div>
+  <div class="company-sub">பதிவு அலுவலகம்: செட்டிகுளம் சந்திப்பு, கே.பி. ரோடு, நாகர்கோவில் – 629001</div>
+  <div class="doc-title-badge">படிவம் 3: நகைப் பரிசோதனை & இறுதி தீர்வு ரசீது (Testing & Final Settlement)</div>
+</div>
+
+<table style="margin-bottom: 3px;">
+  <tr>
+    <td style="width: 50%; border: none;"><strong>வாடிக்கையாளர் பெயர்:</strong> {{ customer_name }}</td>
+    <td style="width: 50%; border: none; text-align: right;"><strong>தேதி & நேரம்:</strong> {{ txn_date }} | {{ txn_time }}</td>
+  </tr>
+</table>
+
+<div class="section-title">பகுதி A: நேரடி நகைப் பரிசோதனை விவரம் (Purity & Weight Verification)</div>
+<table class="data-table">
+  <tr>
+    <th style="width: 35%;">பரிசோதனை விபரம்</th>
+    <th style="width: 25%;">அளவு / முடிவு</th>
+    <th style="width: 40%;">சரிபார்ப்பு குறிப்பு</th>
+  </tr>
+  <tr>
+    <td><strong>மொத்த எடை (Gross Weight)</strong></td>
+    <td>........................... கிராம்</td>
+    <td>டிஜிட்டல் தராசு மூலம் சரிபார்க்கப்பட்டது</td>
+  </tr>
+  <tr>
+    <td><strong>கழிவு / கல் எடை (Stone/Enamel/Wax)</strong></td>
+    <td>........................... கிராம்</td>
+    <td>வாடிக்கையாளர் முன்னிலையில் கழிவு செய்யப்பட்டது</td>
+  </tr>
+  <tr>
+    <td><strong>நிகர எடை (Net Gold Weight)</strong></td>
+    <td>........................... கிராம்</td>
+    <td>கொள்முதலுக்குரிய நிகர தங்க எடை</td>
+  </tr>
+  <tr>
+    <td><strong>தங்கத்தின் தரம் (XRF Analyzer Test)</strong></td>
+    <td>.............. காரட் / ........%</td>
+    <td>கம்ப்யூட்டர் XRF சோதனை முடிவு</td>
+  </tr>
+  <tr>
+    <td><strong>அன்றைய கொள்முதல் விலை (கிராம் 1-க்கு)</strong></td>
+    <td>ரூ. ........................./-</td>
+    <td>அன்றைய சந்தை நிலவரப்படி</td>
+  </tr>
+  <tr style="background: #fdf2e9; font-weight: bold;">
+    <td>நகைகளின் மொத்த மதிப்பு (Total Valuation)</td>
+    <td colspan="2">ரூ. ............................................................................................</td>
+  </tr>
+</table>
+
+<div class="section-title">பகுதி B: இறுதி கணக்குத் தீர்வு விவரம் (Final Financial Settlement)</div>
+<table class="data-table">
+  <tr>
+    <td style="width: 60%;">நகைகளின் மொத்தக் கொள்முதல் மதிப்பு (A)</td>
+    <td style="width: 40%;">ரூ. ........................................</td>
+  </tr>
+  <tr>
+    <td>கழிக்கப்பட்டது: முன்னதாக வழங்கப்பட்ட மீட்பு முன்பணம் (B) [UTR Ref: {{ utr_no }}]</td>
+    <td>(-) ரூ. {{ advance_amount }}/-</td>
+  </tr>
+  <tr>
+    <td>கழிக்கப்பட்டது: சேவைக் கட்டணம் / சேதாரம் (இருப்பின்) (C)</td>
+    <td>(-) ரூ. ....................................</td>
+  </tr>
+  <tr style="background: #eafaf1; font-weight: bold; font-size: 8.8pt; color: #1e8449;">
+    <td>வாடிக்கையாளருக்கு வழங்கப்படும் நிகர மீதித் தொகை (Net Payable = A - B - C)</td>
+    <td>ரூ. ........................................</td>
+  </tr>
+  <tr>
+    <td>தொகை வழங்கப்பட்ட முறை</td>
+    <td>[ ] IMPS / NEFT &nbsp;&nbsp; [ ] ரொக்கம்</td>
+  </tr>
+  <tr>
+    <td>பாதுகாப்புக் காசோலை திரும்ப ஒப்படைக்கப்பட்டது</td>
+    <td>காசோலை எண்: {{ cheque_no }} [ ] திரும்பப் பெறப்பட்டது</td>
+  </tr>
+</table>
+
+<div style="font-size: 8pt; text-align: justify; margin: 4px 0; color: #222; background: #f9f9f9; border: 1px solid #ddd; padding: 4px; border-radius: 4px;">
+  <strong>இறுதி ஒப்புதல் பிரகடனம்:</strong> எனது அடகு நகைகள் வங்கியிலிருந்து முழுமையாக மீட்கப்பட்டு, என் முன்னிலையிலேயே எடை மற்றும் தூய்மைப் பரிசோதனை மேற்கொள்ளப்பட்டது. மேற்கண்ட கணக்கீடுகள் அனைத்தும் எனக்கு முழு திருப்தியளிக்கிறது. எனக்கான முழுமையான மீதித் தீர்வுத் தொகையைப் பெற்றுக்கொண்டேன். மேலும் தொடக்கத்தில் நான் வழங்கிய பாதுகாப்புக் காசோலையையும் திரும்பப் பெற்றுக்கொண்டேன். இத்துடன் இப்பரிவர்த்தனை எவ்வித பாக்கியுமின்றி முழுமையாக நிறைவடைந்தது.
+</div>
+
+<div class="sign-container" style="margin-top: 6px;">
+  <div class="sign-col" style="width: 30%;">
+    <span class="normal-sign-label">நகைப் பரிசோதகர் கையொப்பம்</span>
+    <div class="normal-sign-line">(Tester / Appraiser)</div>
+  </div>
+  <div class="sign-col" style="width: 30%;">
+    <span class="normal-sign-label">காசாளர் / மேலாளர் கையொப்பம்</span>
+    <div class="normal-sign-line">அங்கீகரிக்கப்பட்ட அலுவலர்</div>
+  </div>
+  <div class="sign-col" style="width: 40%;">
+    <div class="sign-box-customer">
+      <span class="sign-label">
+        <svg class="sign-icon" viewBox="0 0 24 24" fill="#8b0000"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        வாடிக்கையாளர் இறுதி ஒப்புதல்
+      </span>
+      <div class="sign-line">முழுத் தொகையும் பெற்றுக் கொண்டேன்</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
