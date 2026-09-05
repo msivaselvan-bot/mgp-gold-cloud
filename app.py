@@ -1,41 +1,18 @@
 from datetime import datetime
-import json
-import gspread
-from google.oauth2.service_account import Credentials
 import jinja2
+import requests
 import streamlit as st
 import weasyprint
 
-# 1. Page Configuration
 st.set_page_config(
     page_title="MGP Gold Takeover Cloud", page_icon="🪙", layout="wide"
 )
 
-st.title("🪙 முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட் - கிளவுட் அடகு நகை மீட்பு அமைப்பு")
+st.title("🪙 முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட் - அடகு நகை மீட்புக் கோப்பு அமைப்பு")
 st.caption("கிளைகளுக்கான ஒருங்கிணைந்த ஆவணத் தொகுப்பு உருவாக்க இணையதளம்")
 st.markdown("---")
 
-
-# 2. Google Sheets Cloud Connection Function
-def get_google_sheet():
-  try:
-    # Streamlit Secrets-லிருந்து கூகுள் சர்வீஸ் அக்கவுண்ட் விவரங்கள் பெறப்படும்
-    creds_dict = json.loads(st.secrets["gcp_service_account"])
-    scopes = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive",
-    ]
-    creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-    client = gspread.authorize(creds)
-    # கூகுள் டிரைவில் உள்ள ஷீட்டின் பெயர்
-    sheet = client.open("MGP_Gold_Takeover_Database").sheet1
-    return sheet
-  except Exception as e:
-    st.warning(f"Google Sheet இணைப்பு தயார் நிலையில் இல்லை: {e}")
-    return None
-
-
-# 3. Input Web Form
+# Input Web Form
 with st.form("cloud_takeover_form", clear_on_submit=False):
   st.subheader("1. வாடிக்கையாளர் விபரம் (Customer Information)")
   col1, col2, col3 = st.columns(3)
@@ -86,7 +63,6 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
       use_container_width=True,
   )
 
-# 4. Processing & PDF Engine
 if submitted:
   if not customer_name or not bank_name or not loan_acc_no or not advance_amount:
     st.error("தயவுசெய்து நட்சத்திரக் குறியிட்ட (*) கட்டாய விவரங்களை நிரப்பவும்!")
@@ -119,9 +95,9 @@ if submitted:
         "branch_name": branch_name,
     }
 
-    # Google Sheets-ல் சேமித்தல்
-    sheet = get_google_sheet()
-    if sheet:
+    # Google Sheets Webhook-க்கு டேட்டா அனுப்புதல்
+    try:
+      webhook_url = st.secrets["google_webhook_url"]
       row_data = [
           docket_no,
           txn_date,
@@ -138,8 +114,10 @@ if submitted:
           cheque_bank,
           cheque_no,
       ]
-      sheet.append_row(row_data)
-      st.toast("✅ Google Sheets கிளவுடில் விவரங்கள் பதிவாகின!", icon="☁️")
+      requests.post(webhook_url, json={"row": row_data}, timeout=10)
+      st.toast("✅ Google Sheets-ல் பதிவாகியது!", icon="☁️")
+    except Exception as e:
+      st.warning(f"Google Sheet சேமிப்பில் பிழை: {e}")
 
     # PDF ஆவணம் உருவாக்குதல்
     with open("template.html", "r", encoding="utf-8") as f:
