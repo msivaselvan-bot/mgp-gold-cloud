@@ -5,12 +5,26 @@ import requests
 import streamlit as st
 import weasyprint
 
+# 1. பக்க கட்டமைப்பு
 st.set_page_config(
     page_title="MGP Gold Takeover Cloud", page_icon="🪙", layout="wide"
 )
 
-# 1. எளிய கிளை அணுகல் கடவுச்சொல் (Security PIN)
-BRANCH_PIN = "1234"  # உங்களுக்கு விருப்பமான 4 இலக்க பின் எண்ணை மாற்றிக்கொள்ளலாம்
+# 2. மேல் வலதுபுற மெனு, GitHub/Fork ஐகான்கள் மற்றும் கீழே உள்ள லோகோவை மறைக்கும் CSS
+hide_streamlit_style = """
+<style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    .stAppDeployButton {display: none;}
+    [data-testid="stToolbar"] {visibility: hidden; display: none;}
+    footer {visibility: hidden;}
+    [data-testid="stDecoration"] {visibility: hidden;}
+</style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+# 3. கிளை அணுகல் கடவுச்சொல் (PIN Protection)
+BRANCH_PIN = "1234"  # தேவைப்பட்டால் உங்கள் விருப்பப்படி மாற்றிக் கொள்ளலாம்
 
 if "authenticated" not in st.session_state:
   st.session_state.authenticated = False
@@ -28,7 +42,7 @@ if not st.session_state.authenticated:
       st.error("தவறான PIN எண்! தயவுசெய்து சரியான எண்ணை உள்ளிடவும்.")
   st.stop()
 
-# 2. முதன்மைப் பயன்பாட்டுத் திரை
+# 4. முதன்மைப் படிவத் திரை
 st.title("🪙 முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட் - அடகு நகை மீட்புக் கோப்பு அமைப்பு")
 st.caption("கிளைகளுக்கான ஒருங்கிணைந்த ஆவணத் தொகுப்பு உருவாக்க இணையதளம்")
 st.markdown("---")
@@ -69,10 +83,8 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
         "மீட்பு முன்பணத் தொகை (ரூ.) *", min_value=1000, step=1000, format="%d"
     )
   with col8:
-    # UTR எண் விருப்பத்தேர்வாக (Optional) மாற்றப்பட்டுள்ளது
-    utr_no = st.text_input(
-        "வங்கி UTR Ref எண் (பணம் அனுப்பிய பின் இருப்பின் நிரப்பவும்)", ""
-    )
+    # UTR எண் விருப்பத்தேர்வு (பணம் அனுப்பிய பிறகு இருந்தால் நிரப்பலாம்)
+    utr_no = st.text_input("வங்கி UTR Ref எண் (இருப்பின் மட்டும் நிரப்பவும்)", "")
     branch_name = st.selectbox(
         "பரிவர்த்தனை செய்யும் நமது கிளை *",
         ["நாகர்கோவில் (HQ)", "திங்கள்நகர்", "பிற கிளைகள்"],
@@ -86,6 +98,7 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
       use_container_width=True,
   )
 
+# 5. தகவல்களைச் சேமித்து PDF உருவாக்கும் பகுதி
 if submitted:
   if not customer_name or not bank_name or not loan_acc_no or not advance_amount:
     st.error("தயவுசெய்து நட்சத்திரக் குறியிட்ட (*) கட்டாய விவரங்களை நிரப்பவும்!")
@@ -95,7 +108,7 @@ if submitted:
     txn_date = now.strftime("%d/%m/%Y")
     txn_time = now.strftime("%I:%M %p")
 
-    # UTR எண் உள்ளிடப்படவில்லை என்றால் பேனாவால் எழுத அடிக்கோடு உருவாக்குதல்
+    # UTR எண் உள்ளிடப்படவில்லை எனில் பேனாவால் எழுத அடிக்கோடு
     display_utr = (
         utr_no.strip() if utr_no.strip() else "___________________________"
     )
@@ -149,7 +162,7 @@ if submitted:
         requests.post(webhook_url, json={"row": row_data}, timeout=10)
         st.toast("✅ Google Sheets-ல் பதிவாகியது!", icon="☁️")
     except Exception:
-      pass  # பின்னணி பிழைகளை ஊழியர்களுக்குக் காட்டாமல் மறைத்தல்
+      pass  # பின்னணி தவறுகள் திரையில் தெரியாமல் மறைத்தல்
 
     # PDF ஆவணம் உருவாக்குதல்
     try:
@@ -170,7 +183,7 @@ if submitted:
           f"✅ ஆவணக் கோப்பு வெற்றிகரமாகத் தயாரானது! கோப்பு எண்: {docket_no}"
       )
       st.download_button(
-          label="📥 PDF கோப்பினை பதிவிறக்கு (Download PDF)",
+          label="📥 PDF கோப்பினை உடனடியாகப் பதிவிறக்கு (Download PDF)",
           data=pdf_bytes,
           file_name=f"Dossier_{docket_no}.pdf",
           mime="application/pdf",
