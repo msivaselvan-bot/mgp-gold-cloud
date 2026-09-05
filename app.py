@@ -1,8 +1,10 @@
+import base64
 from datetime import datetime
 import os
 import jinja2
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
 import weasyprint
 
 # 1. பக்க கட்டமைப்பு
@@ -105,11 +107,11 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
     cheque_no = st.text_input("காசோலை எண்")
 
   submitted = st.form_submit_button(
-      "☁️ கிளவுடில் சேமித்து PDF ஆவணத்தை உருவாக்கு",
+      "🖨️ சேமித்து நேரடியாக அச்சிடுக (Save & Direct Print)",
       use_container_width=True,
   )
 
-# 5. செயலாக்கம் மற்றும் PDF உருவாக்கம்
+# 5. செயலாக்கம் மற்றும் நேரடி அச்சு வசதி
 if submitted:
   if not customer_name or not bank_name or not loan_acc_no or not advance_amount:
     st.error("தயவுசெய்து நட்சத்திரக் குறியிட்ட (*) கட்டாய விவரங்களை நிரப்பவும்!")
@@ -169,7 +171,7 @@ if submitted:
             utr_no if utr_no.strip() else "Pending",
             cheque_bank,
             cheque_no,
-            doc_choice,  # எந்த வகை ஆவணம் என்பதும் பதிவாகும்
+            doc_choice,
         ]
         requests.post(webhook_url, json={"row": row_data}, timeout=10)
         st.toast("✅ Google Sheets-ல் பதிவாகியது!", icon="☁️")
@@ -201,15 +203,51 @@ if submitted:
             string=rendered_html, base_url=current_dir
         ).write_pdf()
 
+        # PDF தரவை Base64-ஆக மாற்றி உலாவியில் நேரடியாக அச்சிடுதல்
+        base64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+
+        print_component = f"""
+        <iframe id="pdf_frame" src="data:application/pdf;base64,{base64_pdf}" style="display:none;"></iframe>
+        <button id="print_btn" onclick="printDoc()" style="
+            background-color: #8b0000;
+            color: white;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        ">🖨️ ஆவணத்தை அச்சிடுக (Direct Print Without Download)</button>
+
+        <script>
+        function printDoc() {{
+            var iframe = document.getElementById('pdf_frame');
+            if (iframe) {{
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+            }}
+        }}
+        // படிவம் சமர்ப்பிக்கப்பட்ட உடன் பிரிண்ட் விண்டோ தானாகத் திறக்க:
+        setTimeout(printDoc, 600);
+        </script>
+        """
+
         st.success(
-            f"✅ ஆவணக் கோப்பு வெற்றிகரமாகத் தயாரானது! கோப்பு எண்: {docket_no}"
+            f"✅ ஆவணக் கோப்பு தயாரானது! கோப்பு எண்: {docket_no}"
         )
-        st.download_button(
-            label="📥 PDF கோப்பினை பதிவிறக்கு (Download PDF)",
-            data=pdf_bytes,
-            file_name=f"{file_prefix}_{docket_no}.pdf",
-            mime="application/pdf",
-            use_container_width=True,
-        )
+        components.html(print_component, height=75)
+
+        # ஏதேனும் காரணத்தினால் பிரிண்டர் இணைக்கப்படாவிட்டால் பேக்கப் பதிவிறக்க பொத்தான்
+        with st.expander("விருப்பத்தேர்வு: PDF-ஆகப் பதிவிறக்க வேண்டுமா?"):
+          st.download_button(
+              label="📥 PDF பதிவிறக்கம் (Backup Download)",
+              data=pdf_bytes,
+              file_name=f"{file_prefix}_{docket_no}.pdf",
+              mime="application/pdf",
+              use_container_width=True,
+          )
+
       except Exception as err:
-        st.error(f"PDF உருவாக்கத்தில் பிழை: {err}")
+        st.error(f"ஆவணம் தயாரிப்பதில் பிழை: {err}")
