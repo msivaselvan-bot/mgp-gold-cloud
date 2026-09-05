@@ -12,7 +12,7 @@ st.set_page_config(
     page_title="MGP Gold Takeover Cloud", page_icon="🪙", layout="wide"
 )
 
-# 2. மேல் வலதுபுற மெனு மற்றும் GitHub ஐகான்களை மறைக்கும் CSS
+# 2. மேல் வலதுபுற மெனு மற்றும் பிற தேவையில்லாத ஐகான்களை மறைக்கும் CSS
 hide_streamlit_style = """
 <style>
     #MainMenu {visibility: hidden;}
@@ -26,7 +26,7 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # 3. கிளை அணுகல் கடவுச்சொல் (PIN Protection)
-BRANCH_PIN = "1234"  # தேவைப்பட்டால் மாற்றிக் கொள்ளலாம்
+BRANCH_PIN = "1234"
 
 if "authenticated" not in st.session_state:
   st.session_state.authenticated = False
@@ -111,7 +111,7 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
       use_container_width=True,
   )
 
-# 5. செயலாக்கம் மற்றும் நேரடி அச்சு வசதி
+# 5. செயலாக்கம் மற்றும் நேரடி அச்சு
 if submitted:
   if not customer_name or not bank_name or not loan_acc_no or not advance_amount:
     st.error("தயவுசெய்து நட்சத்திரக் குறியிட்ட (*) கட்டாய விவரங்களை நிரப்பவும்!")
@@ -121,7 +121,6 @@ if submitted:
     txn_date = now.strftime("%d/%m/%Y")
     txn_time = now.strftime("%I:%M %p")
 
-    # UTR எண் உள்ளிடப்படவில்லை என்றால் பேனாவால் எழுத அடிக்கோடு
     display_utr = (
         utr_no.strip() if utr_no.strip() else "___________________________"
     )
@@ -182,10 +181,8 @@ if submitted:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if "குறைந்த தொகை" in doc_choice:
       target_template = "template_simple.html"
-      file_prefix = "Simple_Legal_Kit"
     else:
       target_template = "template_dossier.html"
-      file_prefix = "High_Value_Dossier"
 
     template_path = os.path.join(current_dir, target_template)
 
@@ -199,55 +196,55 @@ if submitted:
         template = jinja2.Template(template_str)
         rendered_html = template.render(context)
 
+        # PDF உருவாக்கம்
         pdf_bytes = weasyprint.HTML(
             string=rendered_html, base_url=current_dir
         ).write_pdf()
-
-        # PDF தரவை Base64-ஆக மாற்றி உலாவியில் நேரடியாக அச்சிடுதல்
         base64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
 
+        # உலாவி நேரடியாக பிரிண்டரை இயக்கும் ஜாவாஸ்கிரிப்ட்
         print_component = f"""
-        <iframe id="pdf_frame" src="data:application/pdf;base64,{base64_pdf}" style="display:none;"></iframe>
-        <button id="print_btn" onclick="printDoc()" style="
-            background-color: #8b0000;
-            color: white;
-            padding: 12px 20px;
-            font-size: 15px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        ">🖨️ ஆவணத்தை அச்சிடுக (Direct Print Without Download)</button>
+        <div style="text-align: center; margin-top: 15px;">
+            <button id="print_btn" onclick="openAndPrint()" style="
+                background-color: #8b0000;
+                color: #ffffff;
+                padding: 14px 28px;
+                font-size: 16px;
+                font-weight: bold;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+                width: 100%;
+            ">🖨️ ஆவணத்தை உடனடியாக அச்சிடுக (Click to Print)</button>
+        </div>
 
         <script>
-        function printDoc() {{
-            var iframe = document.getElementById('pdf_frame');
-            if (iframe) {{
-                iframe.contentWindow.focus();
-                iframe.contentWindow.print();
+        function openAndPrint() {{
+            var byteCharacters = atob("{base64_pdf}");
+            var byteNumbers = new Array(byteCharacters.length);
+            for (var i = 0; i < byteCharacters.length; i++) {{
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }}
+            var byteArray = new Uint8Array(byteNumbers);
+            var blob = new Blob([byteArray], {{type: 'application/pdf'}});
+            var blobURL = URL.createObjectURL(blob);
+            
+            var printWin = window.open(blobURL);
+            if (printWin) {{
+                printWin.focus();
+                printWin.onload = function() {{
+                    printWin.print();
+                }};
             }}
         }}
-        // படிவம் சமர்ப்பிக்கப்பட்ட உடன் பிரிண்ட் விண்டோ தானாகத் திறக்க:
-        setTimeout(printDoc, 600);
+        // படிவம் சமர்ப்பிக்கப்பட்ட உடன் பிரிண்ட் விண்டோவைத் தானாகத் திறக்க முயற்சிக்கும்
+        setTimeout(openAndPrint, 500);
         </script>
         """
 
-        st.success(
-            f"✅ ஆவணக் கோப்பு தயாரானது! கோப்பு எண்: {docket_no}"
-        )
-        components.html(print_component, height=75)
-
-        # ஏதேனும் காரணத்தினால் பிரிண்டர் இணைக்கப்படாவிட்டால் பேக்கப் பதிவிறக்க பொத்தான்
-        with st.expander("விருப்பத்தேர்வு: PDF-ஆகப் பதிவிறக்க வேண்டுமா?"):
-          st.download_button(
-              label="📥 PDF பதிவிறக்கம் (Backup Download)",
-              data=pdf_bytes,
-              file_name=f"{file_prefix}_{docket_no}.pdf",
-              mime="application/pdf",
-              use_container_width=True,
-          )
+        st.success(f"✅ ஆவணக் கோப்பு தயாரானது! கோப்பு எண்: {docket_no}")
+        components.html(print_component, height=85)
 
       except Exception as err:
         st.error(f"ஆவணம் தயாரிப்பதில் பிழை: {err}")
