@@ -1,5 +1,5 @@
 streamlit
-weasyprint
+weasyprint==62.3
 jinja2
 requests
 pandas
