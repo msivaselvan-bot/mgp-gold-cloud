@@ -10,7 +10,7 @@ st.set_page_config(
     page_title="MGP Gold Takeover Cloud", page_icon="🪙", layout="wide"
 )
 
-# 2. மேல் வலதுபுற மெனு, GitHub/Fork ஐகான்கள் மற்றும் கீழே உள்ள லோகோவை மறைக்கும் CSS
+# 2. மேல் வலதுபுற மெனு மற்றும் GitHub ஐகான்களை மறைக்கும் CSS
 hide_streamlit_style = """
 <style>
     #MainMenu {visibility: hidden;}
@@ -24,7 +24,7 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # 3. கிளை அணுகல் கடவுச்சொல் (PIN Protection)
-BRANCH_PIN = "1234"  # தேவைப்பட்டால் உங்கள் விருப்பப்படி மாற்றிக் கொள்ளலாம்
+BRANCH_PIN = "1234"  # தேவைப்பட்டால் மாற்றிக் கொள்ளலாம்
 
 if "authenticated" not in st.session_state:
   st.session_state.authenticated = False
@@ -42,12 +42,24 @@ if not st.session_state.authenticated:
       st.error("தவறான PIN எண்! தயவுசெய்து சரியான எண்ணை உள்ளிடவும்.")
   st.stop()
 
-# 4. முதன்மைப் படிவத் திரை
+# 4. முதன்மைத் திரை & ஆவண வகை தேர்வு
 st.title("🪙 முத்துசிஸ் கோல்டு புராடக்ட் பி.லிட் - அடகு நகை மீட்புக் கோப்பு அமைப்பு")
 st.caption("கிளைகளுக்கான ஒருங்கிணைந்த ஆவணத் தொகுப்பு உருவாக்க இணையதளம்")
 st.markdown("---")
 
 with st.form("cloud_takeover_form", clear_on_submit=False):
+  st.subheader("📑 தேவையான ஆவண வகையைத் தேர்ந்தெடுக்கவும்")
+  doc_choice = st.radio(
+      "ஆவண மாதிரி (Document Format):",
+      [
+          "குறைந்த தொகைக்கான எளிய படிவம் (ரூ. 1 ரெவென்யூ ஸ்டாம்ப்)",
+          "உயர் மதிப்பு 5 பக்க முழு கோப்பு (நான்-ஜுடிசியல் முத்திரைத்தாள்)",
+      ],
+      index=0,
+      horizontal=True,
+  )
+
+  st.markdown("---")
   st.subheader("1. வாடிக்கையாளர் விபரம் (Customer Information)")
   col1, col2, col3 = st.columns(3)
   with col1:
@@ -83,7 +95,6 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
         "மீட்பு முன்பணத் தொகை (ரூ.) *", min_value=1000, step=1000, format="%d"
     )
   with col8:
-    # UTR எண் விருப்பத்தேர்வு (பணம் அனுப்பிய பிறகு இருந்தால் நிரப்பலாம்)
     utr_no = st.text_input("வங்கி UTR Ref எண் (இருப்பின் மட்டும் நிரப்பவும்)", "")
     branch_name = st.selectbox(
         "பரிவர்த்தனை செய்யும் நமது கிளை *",
@@ -98,7 +109,7 @@ with st.form("cloud_takeover_form", clear_on_submit=False):
       use_container_width=True,
   )
 
-# 5. தகவல்களைச் சேமித்து PDF உருவாக்கும் பகுதி
+# 5. செயலாக்கம் மற்றும் PDF உருவாக்கம்
 if submitted:
   if not customer_name or not bank_name or not loan_acc_no or not advance_amount:
     st.error("தயவுசெய்து நட்சத்திரக் குறியிட்ட (*) கட்டாய விவரங்களை நிரப்பவும்!")
@@ -108,7 +119,7 @@ if submitted:
     txn_date = now.strftime("%d/%m/%Y")
     txn_time = now.strftime("%I:%M %p")
 
-    # UTR எண் உள்ளிடப்படவில்லை எனில் பேனாவால் எழுத அடிக்கோடு
+    # UTR எண் உள்ளிடப்படவில்லை என்றால் பேனாவால் எழுத அடிக்கோடு
     display_utr = (
         utr_no.strip() if utr_no.strip() else "___________________________"
     )
@@ -158,39 +169,47 @@ if submitted:
             utr_no if utr_no.strip() else "Pending",
             cheque_bank,
             cheque_no,
+            doc_choice,  # எந்த வகை ஆவணம் என்பதும் பதிவாகும்
         ]
         requests.post(webhook_url, json={"row": row_data}, timeout=10)
         st.toast("✅ Google Sheets-ல் பதிவாகியது!", icon="☁️")
     except Exception:
-      pass  # பின்னணி தவறுகள் திரையில் தெரியாமல் மறைத்தல்
+      pass
 
-    # PDF ஆவணம் உருவாக்குதல்
-    try:
-      current_dir = os.path.dirname(os.path.abspath(__file__))
-      template_path = os.path.join(current_dir, "template.html")
+    # தேர்ந்தெடுக்கப்பட்ட டெம்ப்ளேட்டைத் தீர்மானித்தல்
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if "குறைந்த தொகை" in doc_choice:
+      target_template = "template_simple.html"
+      file_prefix = "Simple_Legal_Kit"
+    else:
+      target_template = "template_dossier.html"
+      file_prefix = "High_Value_Dossier"
 
-      with open(template_path, "r", encoding="utf-8") as f:
-        template_str = f.read()
+    template_path = os.path.join(current_dir, target_template)
 
-      template = jinja2.Template(template_str)
-      rendered_html = template.render(context)
+    if not os.path.exists(template_path):
+      st.error(f"பிழை: '{target_template}' கோப்பு GitHub-ல் கிடைக்கவில்லை!")
+    else:
+      try:
+        with open(template_path, "r", encoding="utf-8") as f:
+          template_str = f.read()
 
-      pdf_bytes = weasyprint.HTML(
-          string=rendered_html, base_url=current_dir
-      ).write_pdf()
+        template = jinja2.Template(template_str)
+        rendered_html = template.render(context)
 
-      st.success(
-          f"✅ ஆவணக் கோப்பு வெற்றிகரமாகத் தயாரானது! கோப்பு எண்: {docket_no}"
-      )
-      st.download_button(
-          label="📥 PDF கோப்பினை உடனடியாகப் பதிவிறக்கு (Download PDF)",
-          data=pdf_bytes,
-          file_name=f"Dossier_{docket_no}.pdf",
-          mime="application/pdf",
-          use_container_width=True,
-      )
-    except Exception as err:
-      st.error(
-          "PDF ஆவணம் உருவாக்குவதில் தற்காலிகத் தடை ஏற்பட்டுள்ளது. நிர்வாகியைத்"
-          " தொடர்பு கொள்ளவும்."
-      )
+        pdf_bytes = weasyprint.HTML(
+            string=rendered_html, base_url=current_dir
+        ).write_pdf()
+
+        st.success(
+            f"✅ ஆவணக் கோப்பு வெற்றிகரமாகத் தயாரானது! கோப்பு எண்: {docket_no}"
+        )
+        st.download_button(
+            label="📥 PDF கோப்பினை பதிவிறக்கு (Download PDF)",
+            data=pdf_bytes,
+            file_name=f"{file_prefix}_{docket_no}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
+      except Exception as err:
+        st.error(f"PDF உருவாக்கத்தில் பிழை: {err}")
